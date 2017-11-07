@@ -5,8 +5,9 @@ CONFSBOX = YAML.load(File.open(File.join(File.dirname(__FILE__), "Scotchbox.yaml
 ENV['VAGRANT_DEFAULT_PROVIDER'] = CONFSBOX["provider"] ||= "virtualbox"
 FALIASES = File.join(File.dirname(__FILE__), "aliases")
 
-Vagrant.configure("2") do |config|
+name = "scotchbox35"
 
+Vagrant.configure("2") do |config|
     config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
     config.ssh.username = "vagrant"
     config.ssh.password = "vagrant"
@@ -23,7 +24,8 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder ".", "/vagrant", disabled: true
 
     config.vm.provider :virtualbox do |vbox|
-        # Set server memory
+	    vbox.name = name
+        # Set server memory in MegaBytes and CPU core count
         vbox.customize ["modifyvm", :id, "--memory", CONFSBOX['memory'], "--cpus", CONFSBOX['cpus']]
         # Set the timesync threshold to 100 seconds, instead of the default 20 minutes.
         # If the clock gets more than 15 minutes out of sync (due to your laptop going
@@ -72,6 +74,7 @@ Vagrant.configure("2") do |config|
         end
       end
     end
+    config.vm.provision "shell", privileged: false, path: "./provision.sh"
 
     config.hostmanager.manage_host = true
     config.hostmanager.ignore_private_ip = false
