@@ -2,10 +2,9 @@
 # vi: set ft=ruby :
 require 'yaml'
 CONFSBOX = YAML.load(File.open(File.join(File.dirname(__FILE__), "Scotchbox.yaml"), File::RDONLY).read)
-ENV['VAGRANT_DEFAULT_PROVIDER'] = CONFSBOX["provider"] ||= "virtualbox"
+ENV['VAGRANT_DEFAULT_PROVIDER'] = CONFSBOX['provider'] ||= "virtualbox"
 FALIASES = File.join(File.dirname(__FILE__), "aliases")
-
-name = "scotchbox35"
+VBOXNAME = CONFSBOX['name'] ||= "scotchbox"
 
 Vagrant.configure("2") do |config|
     config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
@@ -24,7 +23,7 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder ".", "/vagrant", disabled: true
 
     config.vm.provider :virtualbox do |vbox|
-	    vbox.name = name
+	    vbox.name = VBOXNAME
         # Set server memory in MegaBytes and CPU core count
         vbox.customize ["modifyvm", :id, "--memory", CONFSBOX['memory'], "--cpus", CONFSBOX['cpus']]
         # Set the timesync threshold to 100 seconds, instead of the default 20 minutes.

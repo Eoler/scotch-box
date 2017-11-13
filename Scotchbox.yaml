@@ -1,31 +1,19 @@
 ---
-ip: "192.168.33.10"
-memory: 1024
-cpus: 2
+name: "scotchbox35"
 provider: virtualbox
+ip: "192.168.33.10"
+memory: 2048
+cpus: 2
 
-# folders:
-#     - map: .
-#       to: /var/www
-# sites:
-#     - map: scotch.box
-#       to: /var/www/public
-# databases:
-#     - scotchbox
+projects:
+    - map: c:/prj
+      to: /var/www/prj
+      site: www.prj.devm
+      root: public_html
+      db: prj_db
+      sql: public_html/storage/backup/prj_db.sql
+#    - map: ...
 
 variables:
     - key: APP_ENV
       value: local
-
-# blackfire:
-#     - id: foo
-#       token: bar
-#       client-id: foo
-#       client-token: bar
-
-# ports:
-#     - send: 93000
-#       to: 9300
-#     - send: 7777
-#       to: 777
-#       protocol: udp
